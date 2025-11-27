@@ -6,9 +6,12 @@ import com.tpi.backend.requests_service.clients.TrackingClient;
 import com.tpi.backend.requests_service.dto.*;
 import com.tpi.backend.requests_service.models.*;
 import com.tpi.backend.requests_service.repositories.*;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import lombok.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +31,31 @@ public class SolicitudService {
 
     // --- Crear contenedor ---
     public Long crearContenedor(Double peso, Double volumen, Long clienteId) {
-        return containersClient.crearContenedor(new ContenedorRequest(peso, volumen, clienteId));
+        ContenedorResponseDTO resp = containersClient.crearContenedor(
+                new ContenedorRequest(peso, volumen, clienteId)
+        );
+        if (resp == null || resp.getId() == null) {
+            throw new RuntimeException("Error al crear contenedor: respuesta nula del servicio de contenedores");
+        }
+        return resp.getId();
     }
 
-    // --- Crear solicitud ---
-    public Solicitud crearSolicitud(SolicitudRequest req) {
+    // ------------------------------
+    //  MÉTODO crearSolicitud()
+    // ------------------------------
+    public SolicitudResponseDTO crearSolicitud(SolicitudRequest req) {
+
         Cliente cli = validarCliente(req.getClienteId());
-        Long contId = crearContenedor(req.getPesoContenedor(), req.getVolumenContenedor(), cli.getId());
+
+        ContenedorResponseDTO cont = containersClient.crearContenedor(
+                new ContenedorRequest(
+                        req.getPesoContenedor(),
+                        req.getVolumenContenedor(),
+                        req.getClienteId()
+                )
+        );
+
+        Long contId = cont.getId();
 
         Solicitud sol = Solicitud.builder()
                 .cliente(cli)
@@ -42,7 +63,9 @@ public class SolicitudService {
                 .estado(EstadoSolicitud.BORRADOR)
                 .build();
 
-        return solicitudRepository.save(sol);
+        sol = solicitudRepository.save(sol);
+
+        return map(sol);   // ← ACÁ SE USA EL MÉTODO map()
     }
 
     // --- Asignar ruta ---
@@ -128,4 +151,21 @@ public class SolicitudService {
                 .filter(s -> s.getCliente().getId().equals(clienteId))
                 .toList();
     }
+
+    private SolicitudResponseDTO map(Solicitud sol) {
+        SolicitudResponseDTO dto = new SolicitudResponseDTO();
+        dto.setNumero(sol.getNumero());
+        dto.setEstado(sol.getEstado().name());
+        dto.setClienteId(sol.getCliente().getId());
+        dto.setContenedorId(sol.getContenedorId());
+        dto.setRutaId(sol.getRutaId());
+        dto.setCostoEstimado(sol.getCostoEstimado());
+        dto.setTiempoEstimado(sol.getTiempoEstimado());
+        dto.setCostoFinal(sol.getCostoFinal());
+        dto.setTiempoReal(sol.getTiempoReal());
+        return dto;
+    }
+
 }
+
+

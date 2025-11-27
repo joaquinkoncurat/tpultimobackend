@@ -1,6 +1,7 @@
 package com.tpi.backend.requests_service.controllers;
 
 import com.tpi.backend.requests_service.dto.SolicitudRequest;
+import com.tpi.backend.requests_service.dto.SolicitudResponseDTO;
 import com.tpi.backend.requests_service.models.EstadoSolicitud;
 import com.tpi.backend.requests_service.models.Solicitud;
 import com.tpi.backend.requests_service.services.SolicitudService;
@@ -18,17 +19,10 @@ public class SolicitudController {
 
     private final SolicitudService solicitudService;
 
-    public SolicitudController(SolicitudService s) { this.solicitudService = s; }
-
     @PostMapping
     public ResponseEntity<SolicitudResponseDTO> crearSolicitud(@RequestBody SolicitudRequest req) {
         SolicitudResponseDTO resp = solicitudService.crearSolicitud(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
-    }
-
-    @PostMapping
-    public Solicitud crearSolicitud(@RequestBody SolicitudRequest req) {
-        return solicitudService.crearSolicitud(req);
     }
 
     @GetMapping("/{id}")

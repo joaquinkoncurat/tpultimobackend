@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.tpi.backend.routes_service.dto.CamionDTO;
 
-@FeignClient(name = "trucks-service", url = "http://trucks-service:8083")
+@FeignClient(
+    name = "trucks-service",
+    contextId = "camionesClient",
+    url = "http://trucks-service:8083"
+)
 public interface CamionesClient {
 
     @GetMapping("/camiones/disponibles")

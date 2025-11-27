@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "tracking-service", url = "http://tracking-service:8087")
+@FeignClient(name = "tracking-service", url = "http://tracking:8087")
 public interface TrackingClient {
 
     @PostMapping("/tracking/tramos")

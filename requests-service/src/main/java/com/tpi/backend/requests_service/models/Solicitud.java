@@ -12,9 +12,9 @@ public class Solicitud {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long numero;
+    private Long numero;  // ESTE ES EL ID DE LA SOLICITUD
 
-    private Long contenedorId; // referencia al microservicio de contenedores
+    private Long contenedorId; 
 
     @ManyToOne
     private Cliente cliente;
@@ -25,12 +25,14 @@ public class Solicitud {
     private Double costoEstimado;
     private Double costoFinal;
 
-    private Integer tiempoEstimado; // en minutos
-    private Integer tiempoReal; // en minutos
+    private Integer tiempoEstimado; 
+    private Integer tiempoReal;
 
-    // Datos del destino solicitado por el cliente
     private String direccionDestino;
     private Double latitudDestino;
     private Double longitudDestino;
+
+    // NECESARIO PARA GUARDAR LA RUTA GENERADA EN ROUTES-SERVICE
+    private Long rutaId;
 
 }

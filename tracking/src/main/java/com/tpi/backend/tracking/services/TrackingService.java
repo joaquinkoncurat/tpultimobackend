@@ -43,10 +43,12 @@ public class TrackingService {
 
         // Obtener distancia real desde Routes
         RutaResponse ruta = routesClient.obtenerRuta(tramo.getRutaId());
+
         double distanciaKm = ruta.getTramos().stream()
-                .filter(t -> t.getId().equals(tramo.getTramoId()))
-                .mapToDouble(t -> t.getDistanciaKm())
+                .filter(tdto -> tdto.getId().equals(tramo.getTramoId()))  // si tu entidad tiene getTramoId
+                .mapToDouble(tdto -> tdto.getDistanciaKm() != null ? tdto.getDistanciaKm() : 0.0)
                 .sum();
+
 
         // Guardar evento localmente (opcional)
         // eventoRepo.save(...)
