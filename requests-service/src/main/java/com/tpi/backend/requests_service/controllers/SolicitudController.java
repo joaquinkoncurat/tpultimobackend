@@ -20,42 +20,22 @@ public class SolicitudController {
     private final SolicitudService solicitudService;
 
     @PostMapping
-    public ResponseEntity<SolicitudResponseDTO> crearSolicitud(@RequestBody SolicitudRequest req) {
-        SolicitudResponseDTO resp = solicitudService.crearSolicitud(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+    public ResponseEntity<Solicitud> crear(@RequestBody SolicitudRequest req) {
+        return ResponseEntity.ok(solicitudService.crearSolicitud(req));
     }
 
     @GetMapping("/{id}")
-    public Solicitud obtener(@PathVariable Long id) {
-        return solicitudService.obtenerSolicitud(id);
+    public ResponseEntity<Solicitud> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitudService.obtener(id));
     }
 
     @PutMapping("/{id}/asignar-ruta")
-    public Solicitud asignarRuta(@PathVariable Long id) {
-        return solicitudService.asignarRuta(id);
+    public ResponseEntity<Solicitud> asignarRuta(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitudService.asignarRuta(id));
     }
 
-    @PutMapping("/{id}/asignar-camion")
-    public Solicitud asignarCamion(@PathVariable Long id, @RequestParam Long camionId) {
-        return solicitudService.asignarCamion(id, camionId);
-    }
-
-    @PutMapping("/{id}/entregar")
-    public Solicitud entregarSolicitud(@PathVariable Long id,
-            @RequestParam Double costoFinal,
-            @RequestParam Integer tiempoReal) {
-        return solicitudService.entregarSolicitud(id, costoFinal, tiempoReal);
-    }
-
-    @GetMapping
-    public List<Solicitud> listarPorEstado(@RequestParam(required = false) String estado) {
-        if (estado == null)
-            return solicitudService.listarTodas();
-        return solicitudService.listarPorEstado(EstadoSolicitud.valueOf(estado));
-    }
-
-    @GetMapping("/cliente/{clienteId}")
-    public List<Solicitud> listarPorCliente(@PathVariable Long clienteId) {
-        return solicitudService.listarPorCliente(clienteId);
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Solicitud>> porEstado(@PathVariable EstadoSolicitud estado) {
+        return ResponseEntity.ok(solicitudService.listarPorEstado(estado));
     }
 }

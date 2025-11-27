@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "containers-service", url = "http://containers-service:8085")
+@FeignClient(name = "containers-service", url = "http://localhost:8083/contenedores")
 public interface ContainersClient {
-    @PostMapping("/contenedores")
-    ContenedorResponseDTO crearContenedor(@RequestBody ContenedorRequest request);
+    @PostMapping
+    Long crearContenedor(@RequestBody ContenedorRequest request);
 }

@@ -6,13 +6,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.tpi.backend.requests_service.models.*;
 
-@FeignClient(name = "routes-service", url = "http://routes-service:8082")
+@FeignClient(name = "routes-service", url = "http://localhost:8082/rutas")
 public interface RoutesClient {
 
-    @PostMapping("/api/rutas/{solicitudId}")
-    RutaResponse estimarRuta(@PathVariable Long solicitudId);
+    @PostMapping("/estimar")
+    Ruta estimarRuta(@RequestParam Long solicitudId);
 
-    @PutMapping("/api/rutas/{rutaId}/asignar-camion")
-    void asignarCamion(@PathVariable Long rutaId, @RequestParam Long camionId);
+    @PutMapping("/{rutaId}/asignar-camion")
+    Ruta asignarCamiones(@PathVariable Long rutaId);
 }

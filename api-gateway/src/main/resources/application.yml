@@ -5,11 +5,11 @@ spring:
   application:
     name: api-gateway
   
+
+
   cloud:
     compatibility-verifier:
       enabled: false
-
-  cloud:
     gateway:
       routes:
         - id: requests-service

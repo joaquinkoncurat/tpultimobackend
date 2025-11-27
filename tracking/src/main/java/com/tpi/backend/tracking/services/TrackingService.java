@@ -48,10 +48,13 @@ public class TrackingService {
                 .filter(tdto -> tdto.getId().equals(tramo.getTramoId()))  // si tu entidad tiene getTramoId
                 .mapToDouble(tdto -> tdto.getDistanciaKm() != null ? tdto.getDistanciaKm() : 0.0)
                 .sum();
-
-
-        // Guardar evento localmente (opcional)
-        // eventoRepo.save(...)
+        eventoRepo.save(EventoTracking.builder()
+                .solicitudId(tramo.getSolicitudId())
+                .tramoId(tramo.getTramoId())
+                .tipo("FINALIZADO")
+                .fechaHora(LocalDateTime.now())
+                .costoParcial(costoParcial)
+                .build());
 
         // Crear DTO para Billing
         EventoTramoFinalizadoDTO eventoBilling = new EventoTramoFinalizadoDTO(

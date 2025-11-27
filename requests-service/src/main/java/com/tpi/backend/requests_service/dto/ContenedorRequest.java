@@ -9,4 +9,5 @@ public class ContenedorRequest {
     private Double peso;
     private Double volumen;
     private Long clienteId;
+    private Long depositoId;
 }
